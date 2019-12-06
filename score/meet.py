@@ -1,5 +1,5 @@
 class Meet:
-    def __init__(self, events):
+    def __init__(self, events=[]):
         self.events = events
 
     def score(self, display=False):
@@ -8,7 +8,7 @@ class Meet:
         away_score = 0
 
         # Add scores for each event
-        for e in events:
+        for e in self.events:
             points = e.score(display)
             home_score += points[0]
             away_score += points[1]
