@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
+from .swimmer import Swimmer
+from datetime import datetime
 
 def fetch_meet_results(url):
     page = requests.get(url)
@@ -61,3 +63,38 @@ def fetch_meet_results(url):
 
 
     return events
+
+def time_to_float(time):
+    try:
+        return float(time)
+    except:
+        if time is None or 'dq' in time.lower():
+            return None
+        return int(time.split(':')[0]) * 60 + float(time.split(':')[1])
+
+def fetch_swimmer(url):
+    '''Downloads the information and times for a swimmer at the given url'''
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features="html.parser")
+
+    # Extract the name of the swimmer
+    last = soup.select('table')[0].select('td')[1].select('b')[0].text
+    first = soup.select('table')[0].select('td')[2].select('b')[0].text
+
+    name = first + ' ' + last
+    swim = Swimmer(name)
+
+    times = soup.select('table')[2].select('tr')
+
+    current_event = times[0].text
+    for i in times:
+        if '<b>' in str(i):
+            current_event = i.text
+        else:
+            swim.times.append(Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
+    return swim
+
+# for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/3118F78CA16E4E49862581DD000ABC4A?OpenDocument').times:
+for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/DAA9D0E8252AD0A586258080006E3E44?OpenDocument').times:
+    print(i.name, i.date, i.time)
