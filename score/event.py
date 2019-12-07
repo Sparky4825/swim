@@ -10,7 +10,7 @@ class Event:
             print("WARNING: EVENT: \"{}\" MARKED AS DIVING AND RELAY!".format(self.name))
             assert not(relay and diving)
 
-    def score(self, display=False):
+    def score(self, display=False, entries=2):
         '''Scores the event and returns in format:
         [points_home, points_away]
 
@@ -39,20 +39,19 @@ class Event:
         else:
             all_times.sort(key=lambda x: x[1].time, reverse=True)
 
-
-
-
-
+        assert entries == 3 or entries == 2
 
         # Set scores based on relay or not
-        if self.relay:
-            scores = [8, 4, 2, 0]
-        else:
-            scores = [6, 4, 3, 2, 1, 0]
-        # if self.relay:
-        #     scores = [6, 3, 1, 0]
-        # else:
-        #     scores = [4, 3, 1, 0, 0]
+        if entries == 3:
+            if self.relay:
+                scores = [8, 4, 2, 0]
+            else:
+                scores = [6, 4, 3, 2, 1, 0]
+        elif entries == 2:
+            if self.relay:
+                scores = [6, 3, 1, 0]
+            else:
+                scores = [4, 3, 1, 0, 0]
 
         # Add points based on times
         count = -1
@@ -82,9 +81,9 @@ class Event:
 
                 lines.append('{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n,' ' * (MAX_NAME_LENGTH - len(n)), p))
 
-            lines.append(' ' * 35)
-            lines.append(' ' * 35)
-            lines.append(' ' * 35)
+            lines.append(' ' * (MAX_NAME_LENGTH + 19))
+            lines.append(' ' * (MAX_NAME_LENGTH + 19))
+            lines.append(' ' * (MAX_NAME_LENGTH + 19))
             count = -1
             for time in self.away_times:
                 count += 1
