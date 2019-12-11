@@ -19,6 +19,9 @@ results5 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwim
 # Oneida @ Sherburne (12/05/2019)
 results6 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Sherburne%20Earlville%20vs%20Oneida%20on%2012-5-2019?OpenDocument')
 
+# Sherburne @ RFA (12/03/2019)
+results7 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Sherburne%20Earlville%20on%2012-3-2019?OpenDocument')
+
 def results_to_meet(results):
     '''Takes results from fetch.fetch_meet_results() and converts
     it to a meet object'''
@@ -49,9 +52,10 @@ m3 = results_to_meet(results3)
 m4 = results_to_meet(results4)
 m5 = results_to_meet(results5)
 m6 = results_to_meet(results6)
+m7 = results_to_meet(results7)
 #
 # m1.score(True)
 # m2.score(True)
 
-m = score.combine_meets(m2, 'away', m6, 'home')
+m = score.combine_meets(m1, 'away', m7, 'away')
 m.score(True, entries=2)
