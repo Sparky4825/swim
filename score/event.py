@@ -75,7 +75,11 @@ class Event:
             print(self.name)
             print('-' * 10)
             for time in self.home_times:
-                t = str(time)
+
+                if not self.diving:
+                    t = str(time)
+                else:
+                    t = str(time.time)
                 n = str(time.name)
                 p = time.points
 
@@ -87,7 +91,10 @@ class Event:
             count = -1
             for time in self.away_times:
                 count += 1
-                t = str(time)
+                if not self.diving:
+                    t = str(time)
+                else:
+                    t = str(time.time)
                 n = str(time.name)
                 p = time.points
 
