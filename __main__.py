@@ -1,19 +1,23 @@
 import fetch
 import score
 
-# HP (away)
+# Coop @ HP (12/03/2019)
 results = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Cooperstown%20on%2012-3-2019?OpenDocument')
-# RFA (away)
+
+# Coop @ RFA (12/05/2019)
 results2 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Cooperstown%20on%2012-5-2019?OpenDocument')
 
-# HP @ Proctor (none)
+# HP @ Proctor (12/05/2019)
 results3  = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Proctor%20vs%20Holland%20Patent%20on%2012-5-2019?OpenDocument')
 
-# Sherburne @ HP
+# Sherburne @ HP (12/10/2019)
 results4 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Sherburne%20Earlville%20on%2012-10-2019?OpenDocument')
 
-# Proctor @ Coop
+# Proctor @ Coop (12/10/2019)
 results5 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Cooperstown%20vs%20Proctor%20on%2012-10-2019?OpenDocument')
+
+# Oneida @ Sherburne (12/05/2019)
+results6 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Sherburne%20Earlville%20vs%20Oneida%20on%2012-5-2019?OpenDocument')
 
 def results_to_meet(results):
     '''Takes results from fetch.fetch_meet_results() and converts
@@ -44,9 +48,10 @@ m2 = results_to_meet(results2)
 m3 = results_to_meet(results3)
 m4 = results_to_meet(results4)
 m5 = results_to_meet(results5)
+m6 = results_to_meet(results6)
 #
 # m1.score(True)
 # m2.score(True)
 
-m = score.combine_meets(m5, 'home', m4, 'away')
+m = score.combine_meets(m2, 'away', m6, 'home')
 m.score(True, entries=2)
