@@ -53,9 +53,9 @@ m4 = results_to_meet(results4)
 m5 = results_to_meet(results5)
 m6 = results_to_meet(results6)
 m7 = results_to_meet(results7)
-#
+#m
 # m1.score(True)
 # m2.score(True)
 
-m = score.combine_meets(m1, 'away', m7, 'away')
+m = score.combine_meets(m5, 'home', m4, 'away')
 m.score(True, entries=2)

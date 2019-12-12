@@ -79,7 +79,7 @@ class Event:
                 if not self.diving:
                     t = str(time)
                 else:
-                    t = str(time.time)
+                    t = '{:.2f}'.format(time.time)
                 n = str(time.name)
                 p = time.points
 
@@ -94,7 +94,7 @@ class Event:
                 if not self.diving:
                     t = str(time)
                 else:
-                    t = str(time.time)
+                    t = '{:.2f}'.format(time.time)
                 n = str(time.name)
                 p = time.points
 
