@@ -14,7 +14,7 @@ def download_everything():
         team = t[0]
         print('Downloading {}... '.format(team), end='')
 
-        download_team_from_url(t[1])
+        download_team_from_url(t[1], team)
         print('done')
 
 def download_team_from_url(url, team):
@@ -47,6 +47,7 @@ def download_teams(name):
 
 data.clear_database()
 
-download_teams(['Cooperstown', 'Proctor', 'Rome Free Academy', 'Oneida', 'Sherburne Earlville', 'Holland Patent'])
+# download_teams(['Cooperstown', 'Proctor', 'Rome Free Academy', 'Oneida', 'Sherburne Earlville', 'Holland Patent'])
+download_everything()
 
 data.close_connection()
