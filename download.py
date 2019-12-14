@@ -29,7 +29,7 @@ def download_team_from_url(url, team):
 
         # Add all of the times
         for time in swim.times:
-            data.add_race(swim.name, team, time.name, time.time, time.date)
+            data.add_race(swim.name, team, time.name, time.time, str(time), time.date)
 
 def download_teams(name):
     # Download list of all teams
@@ -41,10 +41,12 @@ def download_teams(name):
 
     for t in teams:
         if t[0].lower() in names_lower:
+            print('Downloading {}... '.format(t[0]), end='')
             download_team_from_url(t[1], t[0])
+            print('done')
 
 data.clear_database()
 
-download_teams(['Cooperstown', 'Proctor'])
+download_teams(['Cooperstown', 'Proctor', 'Rome Free Academy', 'Oneida', 'Sherburne Earlville', 'Holland Patent'])
 
 data.close_connection()

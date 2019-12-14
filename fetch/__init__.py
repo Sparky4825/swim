@@ -85,7 +85,7 @@ def fetch_swimmer(url):
         2022: 'SO',
         2023: 'FR',
         2024: '\'8',
-        2025: '\'9'
+        2025: '\'7'
     }
 
     info = soup.select('table')[0]

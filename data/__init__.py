@@ -19,12 +19,12 @@ def add_swimmer(name, year, team):
     cur = conn.cursor()
     cur.execute(sql, [name, year, team])
 
-def add_race(name, team, event, time, date):
-    sql = '''INSERT INTO times (name, team, event, time, date)
-    VALUES (?, ?, ?, ?, ?)'''
+def add_race(name, team, event, time, timestr,date):
+    sql = '''INSERT INTO times (name, team, event, time, time_readable, date)
+    VALUES (?, ?, ?, ?, ?, ?)'''
 
     cur = conn.cursor()
-    cur.execute(sql, [name, team, event, time, date])
+    cur.execute(sql, [name, team, event, time, timestr, date])
 
 def close_connection():
     conn.commit()
