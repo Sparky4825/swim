@@ -17,6 +17,7 @@ class Swimmer:
                 return str(time)
 
 
-    def __init__(self, name):
+    def __init__(self, name, year):
         self.name = name
+        self.year = year
         self.times = []

@@ -78,23 +78,86 @@ def fetch_swimmer(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
 
+    # Years of graduation to year name
+    graduation = {
+        2020: 'SR',
+        2021: 'JR',
+        2022: 'SO',
+        2023: 'FR',
+        2024: '\'8',
+        2025: '\'9'
+    }
+
+    info = soup.select('table')[0]
+
     # Extract the name of the swimmer
-    last = soup.select('table')[0].select('td')[1].select('b')[0].text
-    first = soup.select('table')[0].select('td')[2].select('b')[0].text
+    last = info.select('td')[1].select('b')[0].text
+    first = info.select('td')[2].select('b')[0].text
+
+    year = info.select('td')[9].select('b')[0].text
+    year = graduation[int(year)]
 
     name = first + ' ' + last
-    swim = Swimmer(name)
+    swim = Swimmer(name, year)
 
-    times = soup.select('table')[2].select('tr')
+    try:
+        times = soup.select('table')[2].select('tr')
+        current_event = times[0].text
 
-    current_event = times[0].text
-    for i in times:
-        if '<b>' in str(i):
-            current_event = i.text
-        else:
-            swim.times.append(Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
+        for i in times:
+            if '<b>' in str(i):
+                current_event = i.text
+            else:
+                swim.times.append(Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
+
+    except:
+        times = []
+
     return swim
 
+def fetch_team_urls():
+    '''Fetch all the urls for all of the teams in section III'''
+
+    # Gets all of the teams
+    url = 'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/WebTeams?OpenView'
+
+    # Parse the pages
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    # Extract team names and urls
+    dropdown = soup.find_all('option')
+
+    # Format: [name, url]
+    teams = []
+    # Skip the first option because it is the menu title
+    for i in dropdown[1:]:
+        teams.append([i.text, i['value']])
+
+    return teams
+
+def fetch_swimmer_urls(url):
+    '''Fetch all of the swimmers and urls from a team url'''
+
+    # Download/parse the pages
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    # The last table in the page contains all the swimmers
+    table = soup.find_all('table')[-1]
+
+    # Each swimmer is a link in the table
+    links = table.find_all('a')
+
+    # Format: [name and year, url]
+    swimmers = []
+    for i in links:
+        if i is not None:
+            swimmers.append([i.text, 'http://www.swimdata.info' + i['href']])
+
+    return swimmers
+
+
 # for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/3118F78CA16E4E49862581DD000ABC4A?OpenDocument').times:
-for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/DAA9D0E8252AD0A586258080006E3E44?OpenDocument').times:
-    print(i.name, i.date, i.time)
+# for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/DAA9D0E8252AD0A586258080006E3E44?OpenDocument').times:
+#     print(i.name, i.date, i.time)

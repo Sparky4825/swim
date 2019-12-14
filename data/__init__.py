@@ -1,4 +1,5 @@
 import pandas as pd
+import sqlite3
 
 urls = pd.read_csv("urls.csv")
 
@@ -8,4 +9,34 @@ class find:
             if row[0] == date and (team.lower() == row[1].lower() or team.lower() == row[2].lower()):
                 return row[3]
 
-print(find.team_date('Cooperstown','12/5/2019'))
+conn = sqlite3.connect('swim.db')
+
+def add_swimmer(name, year, team):
+
+    sql = '''INSERT INTO swimmers (name, year, team)
+    VALUES (?, ?, ?) '''
+
+    cur = conn.cursor()
+    cur.execute(sql, [name, year, team])
+
+def add_race(name, team, event, time, date):
+    sql = '''INSERT INTO times (name, team, event, time, date)
+    VALUES (?, ?, ?, ?, ?)'''
+
+    cur = conn.cursor()
+    cur.execute(sql, [name, team, event, time, date])
+
+def close_connection():
+    conn.commit()
+    conn.close()
+
+
+def clear_database():
+    allow = input('Program is requesting to EMPTY the database. Allow? y/[N] ')
+    if allow.lower() == 'y':
+        sql = 'DELETE FROM swimmers'
+        cur = conn.cursor()
+        cur.execute(sql)
+
+        sql = 'DELETE FROM times'
+        cur.execute(sql)
