@@ -181,6 +181,7 @@ def fetch_meet_urls(url):
     for i in table.find_all('tr'):
         t = i.find_all('td')
         if len(i.find_all('a')) > 0:
-            meets.append([str(t[1].text), str(t[0].text), i.find_all('a')[0]['href']])
+            meets.append(
+                [str(t[1].text), str(t[0].text), i.find_all('a')[0]['href']])
 
     return meets
