@@ -1,7 +1,7 @@
 import data
 import fetch
 
-# swimmers = fetch.fetch_swimmer_urls('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams%20List/Cooperstown?OpenDocument')
+
 def download_everything():
     # Clear out old data
     data.clear_database()
@@ -17,6 +17,7 @@ def download_everything():
         download_team_from_url(t[1], team)
         print('done')
 
+
 def download_team_from_url(url, team):
     swimmers = fetch.fetch_swimmer_urls(url)
 
@@ -29,7 +30,11 @@ def download_team_from_url(url, team):
 
         # Add all of the times
         for time in swim.times:
-            data.add_race(swim.name, team, time.name, time.time, str(time), time.date)
+            data.add_race(swim.name, team, time.name, time.time, str(time),
+                          time.date)
+
+    # Download meets to get relays
+
 
 def download_teams(name):
     # Download list of all teams
@@ -45,9 +50,57 @@ def download_teams(name):
             download_team_from_url(t[1], t[0])
             print('done')
 
-data.clear_database()
 
-# download_teams(['Cooperstown', 'Proctor', 'Rome Free Academy', 'Oneida', 'Sherburne Earlville', 'Holland Patent'])
-download_everything()
+def download_relays(meet_url, home_team, away_team, date):
+    '''Fetch all of the relays from the meet at the url and save them to the
+    databse'''
 
-data.close_connection()
+    meet = fetch.fetch_meet_results(meet_url)
+
+    # Loop through all races
+    for race in meet:
+
+        # If the race is a relay, add it
+        if 'relay' in race[0].lower():
+
+            # Add all the home times
+            for home_race in race[1]:
+                # Continue if empty race
+                if home_race[0] == '':
+                    continue
+                data.add_race(
+                    home_race[1],
+                    home_team, race[0],
+                    fetch.time_to_float(home_race[0]),
+                    race[0],
+                    date)
+
+            # Add all the away times
+            for away_race in race[2]:
+                # Continue if empty race
+                if away_race[0] == '':
+                    continue
+                data.add_race(
+                    away_race[1],
+                    away_team, race[0],
+                    fetch.time_to_float(away_race[0]),
+                    race[0],
+                    date)
+
+
+# data.clear_database()
+#
+# download_relays(
+#     'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/\
+# Cooperstown%20vs%20Proctor%20on%2012-10-2019?OpenDocument',
+#     'Coop',
+#     'Proctor',
+#     '2019-12-10')
+
+# download_teams(['Cooperstown', 'Proctor', 'Rome Free Academy', 'Oneida',
+#                'Sherburne Earlville', 'Holland Patent'])
+# download_everything()
+
+# data.close_connection()
+
+print(fetch.fetch_meet_urls('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams%20List/Cooperstown?OpenDocument'))
