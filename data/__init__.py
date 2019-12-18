@@ -10,10 +10,6 @@ def team_date(team, date):
             return row[3]
 
 
-class Find:
-    pass
-
-
 conn = sqlite3.connect('swim.db')
 
 
@@ -25,12 +21,12 @@ def add_swimmer(name, year, team):
     cur.execute(sql, [name, year, team])
 
 
-def add_race(name, team, event, time, timestr, date):
+def add_race(name, team, event, time, time_str, date):
     sql = '''INSERT INTO times (name, team, event, time, time_readable, date)
     VALUES (?, ?, ?, ?, ?, ?)'''
 
     cur = conn.cursor()
-    cur.execute(sql, [name, team, event, time, timestr, date])
+    cur.execute(sql, [name, team, event, time, time_str, date])
 
 
 def close_connection():

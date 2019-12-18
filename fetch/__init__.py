@@ -168,8 +168,8 @@ def fetch_swimmer_urls(url):
 
 
 def fetch_meet_urls(url):
-    '''Fetch all of the urls for the meets that the team has been in
-    return [[text, date, url]]'''
+    """Fetch all of the urls for the meets that the team has been in
+    return [[text, date, url]]"""
 
     # Download the page
     page = requests.get(url)
