@@ -7,7 +7,6 @@ class Time:
         self.time = time
         self.points = 0
 
-    @property
     def __str__(self):
         if self.time is None:
             return 'DQ'
