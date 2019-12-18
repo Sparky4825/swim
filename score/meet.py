@@ -1,5 +1,7 @@
 class Meet:
-    def __init__(self, events=[]):
+    def __init__(self, events=None):
+        if events is None:
+            events = []
         self.events = events
 
     def score(self, display=False, entries=2):
@@ -14,5 +16,5 @@ class Meet:
             away_score += points[1]
 
         if display:
-            print("Final results: ", home_score, away_score)
+            print("Final results_array: ", home_score, away_score)
         return [home_score, away_score]

@@ -3,6 +3,7 @@ import requests
 from .swimmer import Swimmer
 from datetime import datetime
 
+
 def fetch_meet_results(url):
     page = requests.get(url)
 
@@ -16,7 +17,8 @@ def fetch_meet_results(url):
             results[-1].append(cell.text)
 
     events = []
-    # Format: [EVENT NAME, [[HOME TIME, SWIMMER NAME], [HOME TIME, SWIMEER NAME]], [[AWAY TIME, SWIMMER NAME], [AWAY TIME, SWIMMER NAME]]]
+    # Format: [EVENT NAME, [[HOME TIME, SWIMMER NAME], [HOME TIME, SWIMMER NAME]], [[AWAY TIME, SWIMMER NAME],
+    # [AWAY TIME, SWIMMER NAME]]]
 
     # Options are:
     # event
@@ -43,7 +45,6 @@ def fetch_meet_results(url):
         # If parsing times, add a new time to the last event
         elif current_parse == 'times':
 
-
             if row[0] == '' and row[7] == '':
                 # if on to the next event
                 current_parse = 'event'
@@ -57,23 +58,24 @@ def fetch_meet_results(url):
         elif current_parse == 'exhib':
             # Scan until the end of the exhibition, then start the next event
             if len(row) == 1:
-                print('done with exhibnition')
+                print('done with exhibition')
                 current_parse = 'times'
                 events.append([row[0], [], []])
 
-
     return events
+
 
 def time_to_float(time):
     try:
         return float(time)
-    except:
+    except ValueError:
         if time is None or 'dq' in time.lower():
             return None
         return int(time.split(':')[0]) * 60 + float(time.split(':')[1])
 
+
 def fetch_swimmer(url):
-    '''Downloads the information and times for a swimmer at the given url'''
+    """Downloads the information and times for a swimmer at the given url"""
 
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
@@ -108,15 +110,17 @@ def fetch_swimmer(url):
             if '<b>' in str(i):
                 current_event = i.text
             else:
-                swim.times.append(Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
+                swim.times.append(
+                    Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
 
-    except:
-        times = []
+    except IndexError:
+        pass
 
     return swim
 
+
 def fetch_team_urls():
-    '''Fetch all the urls for all of the teams in section III'''
+    """Fetch all the urls for all of the teams in section III"""
 
     # Gets all of the teams
     url = 'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/WebTeams?OpenView'
@@ -136,8 +140,9 @@ def fetch_team_urls():
 
     return teams
 
+
 def fetch_swimmer_urls(url):
-    '''Fetch all of the swimmers and urls from a team url'''
+    """Fetch all of the swimmers and urls from a team url"""
 
     # Download/parse the pages
     page = requests.get(url)
@@ -156,8 +161,3 @@ def fetch_swimmer_urls(url):
             swimmers.append([i.text, 'http://www.swimdata.info' + i['href']])
 
     return swimmers
-
-
-# for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/3118F78CA16E4E49862581DD000ABC4A?OpenDocument').times:
-# for i in fetch_swimmer('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams/DAA9D0E8252AD0A586258080006E3E44?OpenDocument').times:
-#     print(i.name, i.date, i.time)

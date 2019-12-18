@@ -8,13 +8,12 @@ class Event:
 
         if self.relay and self.diving:
             print("WARNING: EVENT: \"{}\" MARKED AS DIVING AND RELAY!".format(self.name))
-            assert not(relay and diving)
+            assert not (relay and diving)
 
     def score(self, display=False, entries=2):
-        '''Scores the event and returns in format:
-        [points_home, points_away]
+        """Scores the event and returns in format:
+        [points_home, points_away]"""
 
-        '''
         points_home = 0
         points_away = 0
         # Add all times to the list
@@ -28,13 +27,13 @@ class Event:
         all_times = []
         # Remove DQs
         for i in all_times_with_dq:
-            if i[1].time == None:
+            if i[1].time is None:
                 i[1].points = 0
             else:
                 all_times.append(i)
 
         # Sort based on times
-        if not(self.diving):
+        if not self.diving:
             all_times.sort(key=lambda x: x[1].time)
         else:
             all_times.sort(key=lambda x: x[1].time, reverse=True)
@@ -52,6 +51,8 @@ class Event:
                 scores = [6, 3, 1, 0]
             else:
                 scores = [4, 3, 1, 0, 0]
+        else:
+            scores = []
 
         # Add points based on times
         count = -1
@@ -83,7 +84,8 @@ class Event:
                 n = str(time.name)
                 p = time.points
 
-                lines.append('{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n,' ' * (MAX_NAME_LENGTH - len(n)), p))
+                lines.append(
+                    '{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n, ' ' * (MAX_NAME_LENGTH - len(n)), p))
 
             lines.append(' ' * (MAX_NAME_LENGTH + 19))
             lines.append(' ' * (MAX_NAME_LENGTH + 19))
@@ -100,13 +102,12 @@ class Event:
 
                 # lines[count] += ('{}{}     {}{} {}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
                 # lines[count] += ('{0}{1}     {2}{3} {4}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
-                lines[count] += ('{4} {3}{2}     {1}{0}'.format(' ' * (8 - len(t)), t, n,' ' * (MAX_NAME_LENGTH - len(n)), p))
+                lines[count] += (
+                    '{4} {3}{2}     {1}{0}'.format(' ' * (8 - len(t)), t, n, ' ' * (MAX_NAME_LENGTH - len(n)), p))
 
             for i in lines:
                 print(i)
 
-
-
-        print(' ' * 54, [points_home, points_away] )
+        print(' ' * 54, [points_home, points_away])
 
         return [points_home, points_away]

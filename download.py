@@ -1,7 +1,11 @@
 import data
 import fetch
 
-# swimmers = fetch.fetch_swimmer_urls('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams%20List/Cooperstown?OpenDocument')
+
+# swimmers = fetch.fetch_swimmer_urls('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Teams%20List/Cooperstown
+# ?OpenDocument')
+
+
 def download_everything():
     # Clear out old data
     data.clear_database()
@@ -17,6 +21,7 @@ def download_everything():
         download_team_from_url(t[1])
         print('done')
 
+
 def download_team_from_url(url, team):
     swimmers = fetch.fetch_swimmer_urls(url)
 
@@ -31,6 +36,7 @@ def download_team_from_url(url, team):
         for time in swim.times:
             data.add_race(swim.name, team, time.name, time.time, time.date)
 
+
 def download_teams(name):
     # Download list of all teams
     teams = fetch.fetch_team_urls()
@@ -42,6 +48,7 @@ def download_teams(name):
     for t in teams:
         if t[0].lower() in names_lower:
             download_team_from_url(t[1], t[0])
+
 
 data.clear_database()
 

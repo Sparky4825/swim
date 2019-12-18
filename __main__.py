@@ -2,33 +2,47 @@ import fetch
 import score
 
 # Coop @ HP (12/03/2019)
-results = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Cooperstown%20on%2012-3-2019?OpenDocument')
+results = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Cooperstown%20on%2012-3'
+    '-2019?OpenDocument')
 
 # Coop @ RFA (12/05/2019)
-results2 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Cooperstown%20on%2012-5-2019?OpenDocument')
+results2 = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Cooperstown%20on'
+    '%2012-5-2019?OpenDocument')
 
 # HP @ Proctor (12/05/2019)
-results3  = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Proctor%20vs%20Holland%20Patent%20on%2012-5-2019?OpenDocument')
+results3 = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Proctor%20vs%20Holland%20Patent%20on%2012-5-2019'
+    '?OpenDocument')
 
 # Sherburne @ HP (12/10/2019)
-results4 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Sherburne%20Earlville%20on%2012-10-2019?OpenDocument')
+results4 = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent%20vs%20Sherburne%20Earlville'
+    '%20on%2012-10-2019?OpenDocument')
 
 # Proctor @ Coop (12/10/2019)
-results5 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Cooperstown%20vs%20Proctor%20on%2012-10-2019?OpenDocument')
+results5 = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Cooperstown%20vs%20Proctor%20on%2012-10-2019'
+    '?OpenDocument')
 
 # Oneida @ Sherburne (12/05/2019)
-results6 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Sherburne%20Earlville%20vs%20Oneida%20on%2012-5-2019?OpenDocument')
+results6 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Sherburne'
+                                    '%20Earlville%20vs%20Oneida%20on%2012-5-2019?OpenDocument')
 
 # Sherburne @ RFA (12/03/2019)
-results7 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Sherburne%20Earlville%20on%2012-3-2019?OpenDocument')
+results7 = fetch.fetch_meet_results(
+    'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Sherburne'
+    '%20Earlville%20on%2012-3-2019?OpenDocument')
 
-def results_to_meet(results):
-    '''Takes results from fetch.fetch_meet_results() and converts
-    it to a meet object'''
+
+def results_to_meet(results_array):
+    """Takes results_array from fetch.fetch_meet_results() and converts
+    it to a meet object"""
 
     meet = score.Meet([])
 
-    for e in results:
+    for e in results_array:
         home_times = []
         away_times = []
 
@@ -46,6 +60,7 @@ def results_to_meet(results):
 
     return meet
 
+
 m1 = results_to_meet(results)
 m2 = results_to_meet(results2)
 m3 = results_to_meet(results3)
@@ -53,7 +68,7 @@ m4 = results_to_meet(results4)
 m5 = results_to_meet(results5)
 m6 = results_to_meet(results6)
 m7 = results_to_meet(results7)
-#m
+# m
 # m1.score(True)
 # m2.score(True)
 
