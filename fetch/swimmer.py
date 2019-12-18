@@ -8,7 +8,6 @@ class Swimmer:
             self.time = time
             self.date = date
 
-        @property
         def __str__(self):
             if self.time is None:
                 return 'DQ'

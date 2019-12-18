@@ -92,6 +92,8 @@ def download_relays(meet_url, home_team, away_team, date):
                     date)
 
 
+data.clear_database()
+
 download_teams(['Cooperstown', 'Proctor'])
 
 data.close_connection()
