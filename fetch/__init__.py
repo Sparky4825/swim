@@ -11,13 +11,15 @@ def fetch_meet_results(url):
     table = soup.select('body > form:nth-child(1) > table:nth-child(15)')[0]
 
     results = []
-    for row in table.find_all('tr')[1:-2]:
+    for row in table.find_all('tr')[1:-1]:
         results.append([])
         for cell in row.find_all('td'):
             results[-1].append(cell.text)
 
     events = []
-    # Format: [EVENT NAME, [[HOME TIME, SWIMMER NAME], [HOME TIME, SWIMMER NAME]], [[AWAY TIME, SWIMMER NAME],
+    # Format: [EVENT NAME,
+    # [[HOME TIME, SWIMMER NAME], [HOME TIME, SWIMMER NAME]],
+    # [[AWAY TIME, SWIMMER NAME],
     # [AWAY TIME, SWIMMER NAME]]]
 
     # Options are:
@@ -37,7 +39,7 @@ def fetch_meet_results(url):
             events.append([row[0], [], []])
             current_parse = 'times'
 
-        # If at a new event, add a new list to the list of events and add the event name
+        # If at new event, add list to the list of events and add event name
         elif current_parse == 'event':
             events.append([row[0], [], []])
             current_parse = 'times'
@@ -87,7 +89,7 @@ def fetch_swimmer(url):
         2022: 'SO',
         2023: 'FR',
         2024: '\'8',
-        2025: '\'9'
+        2025: '\'7'
     }
 
     info = soup.select('table')[0]
@@ -111,7 +113,9 @@ def fetch_swimmer(url):
                 current_event = i.text
             else:
                 swim.times.append(
-                    Swimmer.Time(current_event, datetime.strptime(i.text[:10], '%m/%d/%Y'), time_to_float(i.text[13:])))
+                    Swimmer.Time(current_event,
+                                 datetime.strptime(i.text[:10], '%m/%d/%Y'),
+                                 time_to_float(i.text[13:])))
 
     except IndexError:
         pass
@@ -161,3 +165,24 @@ def fetch_swimmer_urls(url):
             swimmers.append([i.text, 'http://www.swimdata.info' + i['href']])
 
     return swimmers
+
+
+def fetch_meet_urls(url):
+    '''Fetch all of the urls for the meets that the team has been in
+    return [[text, date, url]]'''
+
+    # Download the page
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    # Select the table with the meet urls
+    table = soup.find_all('table')[-3]
+
+    meets = []
+    for i in table.find_all('tr'):
+        t = i.find_all('td')
+        if len(i.find_all('a')) > 0:
+            meets.append(
+                [str(t[1].text), str(t[0].text), i.find_all('a')[0]['href']])
+
+    return meets
