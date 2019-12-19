@@ -11,9 +11,9 @@ def download_everything():
     data.clear_database()
 
     # Download list of all teams
-    teams = fetch.fetch_team_urls()
+    teams_to_download = fetch.fetch_team_urls()
 
-    for t in teams:
+    for t in teams_to_download:
         # Download all swimmers
         team = t[0]
         print('Downloading {}... '.format(team), end='')
@@ -42,13 +42,13 @@ def download_team_from_url(url, team):
 
 def download_teams(name):
     # Download list of all teams
-    teams = fetch.fetch_team_urls()
+    teams_to_download = fetch.fetch_team_urls()
 
     names_lower = []
     for i in name:
         names_lower.append(i.lower())
 
-    for t in teams:
+    for t in teams_to_download:
         if t[0].lower() in names_lower:
             print('Downloading {}... '.format(t[0]), end='')
             download_team_from_url(t[1], t[0])
@@ -66,7 +66,7 @@ def download_relays(meet_url, home_team, away_team, date):
 
         # If the race is a relay, add it
         if 'relay' in race[0].lower():
-
+            print(race)
             # Add all the home times
             for home_race in race[1]:
                 # Continue if empty race
@@ -74,9 +74,10 @@ def download_relays(meet_url, home_team, away_team, date):
                     continue
                 data.add_race(
                     home_race[1],
-                    home_team, race[0],
-                    fetch.time_to_float(home_race[0]),
+                    home_team,
                     race[0],
+                    fetch.time_to_float(home_race[0]),
+                    home_race[0],
                     date)
 
             # Add all the away times
@@ -86,14 +87,41 @@ def download_relays(meet_url, home_team, away_team, date):
                     continue
                 data.add_race(
                     away_race[1],
-                    away_team, race[0],
-                    fetch.time_to_float(away_race[0]),
+                    away_team,
                     race[0],
+                    fetch.time_to_float(away_race[0]),
+                    away_race[0],
                     date)
 
 
-data.clear_database()
+def download_all_relays():
+    """Download all the relays from section III"""
+    meet_urls = fetch.fetch_all_meet_urls()
+    for i in meet_urls:
+        # Extract team names from url
+        names = i.split('/')[-1]
+        names = names.replace('%20', ' ')
 
-download_teams(['Cooperstown', 'Proctor'])
+        home_team = names.split(' vs ')[0]
+        away_team = names.split(' vs ')[1].split(' on ')[0]
+
+        # Extract and format date
+        date = names.split(' vs ')[1].split(' on ')[1].split('?')[0]
+        date = date.split('-')
+        date_reformatted = '{}-{}-{}'.format(date[2], date[0], date[1])
+
+        download_relays(i, home_team, away_team, date_reformatted)
+
+
+data.clear_database()
+teams = [
+    'Cooperstown',
+    'Proctor',
+    'Holland Patent',
+    'Oneida',
+    'Rome Free Academy',
+    'Sherburne Earlville'
+]
+download_teams(teams)
 
 data.close_connection()

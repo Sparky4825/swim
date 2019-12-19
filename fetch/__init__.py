@@ -4,7 +4,7 @@ from .swimmer import Swimmer
 from datetime import datetime
 
 
-def fetch_meet_results(url):
+def fetch_meet_results(url, debug_print=False):
     page = requests.get(url)
 
     soup = BeautifulSoup(page.content, features="html.parser")
@@ -29,9 +29,11 @@ def fetch_meet_results(url):
     current_parse = 'event'
 
     for row in results:
-        print(row)
+        if debug_print:
+            print(row)
         if 'Exhibition' in row[0]:
-            print('starting exhibition')
+            if debug_print:
+                print('starting exhibition')
             current_parse = 'exhib'
 
         # Start new event if only a single element in row
@@ -60,7 +62,8 @@ def fetch_meet_results(url):
         elif current_parse == 'exhib':
             # Scan until the end of the exhibition, then start the next event
             if len(row) == 1:
-                print('done with exhibition')
+                if debug_print:
+                    print('done with exhibition')
                 current_parse = 'times'
                 events.append([row[0], [], []])
 
@@ -186,3 +189,38 @@ def fetch_meet_urls(url):
                 [str(t[1].text), str(t[0].text), i.find_all('a')[0]['href']])
 
     return meets
+
+
+def fetch_all_meet_urls():
+    """Fetch all of the urls for all of the meets in section III"""
+
+    url = 'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meets?OpenView'
+    base_url = 'http://www.section3swim.com'
+
+    # Download the page
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    # Select all of the links
+    dates_urls_soup = soup.find_all('a')
+
+    # Format [[date, url]]
+    date_urls = []
+
+    for link in dates_urls_soup:
+        if link.text.strip() != '':
+            date_urls.append([link.text.strip(), base_url + link['href']])
+
+    meet_urls = []
+
+    for date in date_urls:
+        # Download and parse the page
+        date_page = requests.get(date[1])
+        date_soup = BeautifulSoup(date_page.content, features='html.parser')
+
+        # Search for all of the links to meets
+        for link in date_soup.find_all('a'):
+            if 'Meet%20List' in str(link.get('href')):
+                meet_urls.append(base_url + link['href'])
+
+    return meet_urls
