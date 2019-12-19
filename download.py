@@ -66,7 +66,6 @@ def download_relays(meet_url, home_team, away_team, date):
 
         # If the race is a relay, add it
         if 'relay' in race[0].lower():
-            print(race)
             # Add all the home times
             for home_race in race[1]:
                 # Continue if empty race
@@ -113,15 +112,16 @@ def download_all_relays():
         download_relays(i, home_team, away_team, date_reformatted)
 
 
-data.clear_database()
-teams = [
-    'Cooperstown',
-    'Proctor',
-    'Holland Patent',
-    'Oneida',
-    'Rome Free Academy',
-    'Sherburne Earlville'
-]
-download_teams(teams)
-
+# data.clear_database()
+# teams = [
+#     'Cooperstown',
+#     'Proctor',
+#     'Holland Patent',
+#     'Oneida',
+#     'Rome Free Academy',
+#     'Sherburne Earlville'
+# ]
+# download_teams(teams)
+#
+download_all_relays()
 data.close_connection()

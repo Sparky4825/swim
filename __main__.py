@@ -35,6 +35,14 @@ results7 = fetch.fetch_meet_results(
     'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Rome%20Free%20Academy%20vs%20Sherburne'
     '%20Earlville%20on%2012-3-2019?OpenDocument')
 
+# Oneida @ HP (12/12/2019)
+results8 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Holland%20Patent'
+                                    '%20vs%20Oneida%20on%2012-12-2019?OpenDocument')
+
+# Coop @ SE (12/12/2019)
+results9 = fetch.fetch_meet_results('http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/Meet%20List/Sherburne'
+                                    '%20Earlville%20vs%20Cooperstown%20on%2012-12-2019?OpenDocument')
+
 
 def results_to_meet(results_array):
     """Takes results_array from fetch.fetch_meet_results() and converts
@@ -68,9 +76,12 @@ m4 = results_to_meet(results4)
 m5 = results_to_meet(results5)
 m6 = results_to_meet(results6)
 m7 = results_to_meet(results7)
+m8 = results_to_meet(results8)
+m9 = results_to_meet(results9)
 # m
 # m1.score(True)
 # m2.score(True)
 
-m = score.combine_meets(m5, 'home', m4, 'away')
+m = score.combine_meets(m8, 'away', m9, 'away')
 m.score(True, entries=2)
+# TODO: Score from database and dates rather than download (will be super useful)
