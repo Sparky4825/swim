@@ -18,9 +18,9 @@ def fetch_meet_results(url, debug_print=False):
 
     events = []
     # Format: [EVENT NAME,
-    # [[HOME TIME, SWIMMER NAME], [HOME TIME, SWIMMER NAME]],
-    # [[AWAY TIME, SWIMMER NAME],
-    # [AWAY TIME, SWIMMER NAME]]]
+    # [[HOME TIME, SWIMMER NAME, exhib], [HOME TIME, SWIMMER NAME, exhib]],
+    # [[AWAY TIME, SWIMMER NAME, exhib],
+    # [AWAY TIME, SWIMMER NAME, exhib]]]
 
     # Options are:
     # event
@@ -54,10 +54,10 @@ def fetch_meet_results(url, debug_print=False):
                 current_parse = 'event'
             else:
                 # Add home times to the event
-                events[-1][1].append([row[1], row[0]])
+                events[-1][1].append([row[1], row[0], 'ex' in row[2].lower()])
 
                 # Add away times to the event
-                events[-1][2].append([row[7], row[6]])
+                events[-1][2].append([row[7], row[6], 'ex' in row[5].lower()])
 
         elif current_parse == 'exhib':
             # Scan until the end of the exhibition, then start the next event
@@ -81,7 +81,7 @@ def time_to_float(time):
 
 def fetch_swimmer(url):
     """Downloads the information and times for a swimmer at the given url"""
-
+    # TODO: Determine and list if times were done in a relay or not
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
 
