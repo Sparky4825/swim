@@ -81,7 +81,6 @@ def time_to_float(time):
 
 def fetch_swimmer(url):
     """Downloads the information and times for a swimmer at the given url"""
-    # TODO: Determine and list if times were done in a relay or not
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
 

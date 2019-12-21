@@ -1,7 +1,7 @@
+import data
 import fetch
 import score
-import download
-import data
+
 
 # # Coop @ HP (12/03/2019)
 # results = fetch.fetch_meet_results(
@@ -138,11 +138,10 @@ def meet_from_db(team1, date1, team2, date2):
 
 # m = score.combine_meets(m8, 'away', m9, 'away')
 # m.score(True, entries=2)
-# TODO: Score from database and dates rather than download (will be super useful)
-data.clear_database()
-download.download_times_from_league_meets()
+# data.clear_database()
+# download.download_times_from_league_meets()
 # download.download_all_relays()
 date = '2019-12-19'
-meet_from_db('Cooperstown', date, 'Rome Free Academy', date).score(True, entries=3)
+meet_from_db('Cooperstown', date, 'Sherburne Earlville', date).score(True, entries=2)
 
 data.close_connection()

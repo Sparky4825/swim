@@ -1,13 +1,4 @@
-import pandas as pd
 import sqlite3
-
-urls = pd.read_csv("urls.csv")
-
-
-def team_date(team, date):
-    for index, row in urls.iterrows():
-        if row[0] == date and (team.lower() == row[1].lower() or team.lower() == row[2].lower()):
-            return row[3]
 
 
 conn = sqlite3.connect('swim.db')
