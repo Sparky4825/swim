@@ -43,3 +43,41 @@ def clear_database():
 
         sql = 'DELETE FROM times'
         cur.execute(sql)
+
+
+def search_swimmer(name=None, team=None, year=None):
+    """Searches the database for a swimmer and returns their information in the format:
+    [name, team, year]
+    or None if no swimmer is found"""
+
+    # Return none if no conditions set
+    if name is None and team is None and year is None:
+        return None
+
+    # Get cursor
+    cur = conn.cursor()
+
+    # Set sql query
+    sql = '''SELECT * FROM swimmers WHERE '''
+    conditions = []
+    conditions_parameters = []
+
+    if name is not None:
+        conditions.append("name LIKE ?")
+        conditions_parameters.append('%{}%'.format(name))
+
+    if team is not None:
+        conditions.append("team LIKE ?")
+        conditions_parameters.append('%{}%'.format(team))
+
+    if year is not None:
+        conditions.append("year LIKE ?")
+        conditions_parameters.append('%{}%'.format(year))
+
+    sql += ' AND '.join(conditions)
+
+    cur.execute(sql, conditions_parameters)
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
