@@ -23,7 +23,8 @@ def download_everything():
     download_all_relays()
 
 
-def download_team_from_url(url, team):
+def download_team_from_url(url, team, swimmers_only=False):
+    """Downloads info about a single team from url"""
     swimmers = fetch.fetch_swimmer_urls(url)
 
     for i in swimmers:
@@ -32,16 +33,16 @@ def download_team_from_url(url, team):
 
         # Add to the list of swimmers
         data.add_swimmer(swim.name, swim.year, team)
-
-        # Add all of the times
-        for time in swim.times:
-            data.add_race(swim.name, team, time.name, time.time, str(time),
-                          time.date)
+        if not swimmers_only:
+            # Add all of the times
+            for time in swim.times:
+                data.add_race(swim.name, team, time.name, time.time, str(time),
+                              time.date)
 
     # Download meets to get relays
 
 
-def download_teams(name):
+def download_teams(name, swimmers_only=False):
     # Download list of all teams
     teams_to_download = fetch.fetch_team_urls()
 
@@ -52,11 +53,11 @@ def download_teams(name):
     for t in teams_to_download:
         if t[0].lower() in names_lower:
             print('Downloading {}... '.format(t[0]), end='')
-            download_team_from_url(t[1], t[0])
+            download_team_from_url(t[1], t[0], swimmers_only=swimmers_only)
             print('done')
 
 
-def download_league_teams():
+def download_league_teams(swimmers_only=False):
     """Download all of the teams from our league"""
     teams = [
         'Cooperstown',
@@ -66,7 +67,7 @@ def download_league_teams():
         'Rome Free Academy',
         'Sherburne Earlville'
     ]
-    download_teams(teams)
+    download_teams(teams, swimmers_only=swimmers_only)
 
 
 def download_relays(meet_url, home_team, away_team, date):
