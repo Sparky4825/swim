@@ -23,12 +23,12 @@ def rank_swim(time, event, date=None):
     return round(100 - stats.percentileofscore(all_times, time), 2)
 
 
-def get_weight(x):
+def get_weight_swimmer(x):
     """Calculate the weight for a swimmer based on their place in the team"""
     return max([10 - (1 * 1.6 ** x), 0])
 
 
-def rank_swimmer(name, team=None, count_diving=False):
+def rank_swimmer(name, team=None, count_diving=False, print_scores=False):
     """Averages all the scores for all of the swimmer's races"""
     all_swims = data.search_races(name=name, team=team)
 
@@ -36,7 +36,9 @@ def rank_swimmer(name, team=None, count_diving=False):
     for race in all_swims:
         if 'diving' in race[3].lower() and not count_diving:
             continue
-        percentiles.append(rank_swim(race[5], race[3], race[6]))
+        percentiles.append(rank_swim(race[5], race[3]))
+        if print_scores:
+            print(race[5], race[3], race[6], percentiles[-1])
 
     if len(percentiles) == 0:
         return None
@@ -85,6 +87,6 @@ def rank_team(team_name, display_swimmers=False):
         #     break
 
         ranks_values.append(i)
-        ranks_weights.append(get_weight(count))
+        ranks_weights.append(get_weight_swimmer(count))
     # print(ranks_weights)
     return round(np.average(ranks_values, weights=ranks_weights), 2)
