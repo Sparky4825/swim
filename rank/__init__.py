@@ -5,7 +5,16 @@ from scipy import stats
 
 def rank_swim(time, event, date=None):
     """Creates a percentile ranking for a time given the event, date and time.
-    Returns a float where higher is a faster time"""
+    Returns a float where higher is a faster time
+
+    Args:
+        time (int): The time of the swim in seconds
+        event (str): The name of the event
+        date (str, optional): The date of swims to take into account when rating
+
+    Returns:
+        int: The percentile rank for the swim from 0-100
+    """
 
     if time is None:
         return 0
@@ -24,12 +33,34 @@ def rank_swim(time, event, date=None):
 
 
 def get_weight_swimmer(x):
-    """Calculate the weight for a swimmer based on their place in the team"""
+    """Calculate the weight for a swimmer based on their place in the team.
+
+    It is a basic exponential function.
+
+    Args:
+        x (int): The swimmer's place on the team
+            1 is the best swimmer, higher numbers are worse swimmers
+
+    Returns:
+         float: the weight to apply to the swimmer's rank
+    """
     return max([10 - (1 * 1.6 ** x), 0])
 
 
 def rank_swimmer(name, team=None, count_diving=False, print_scores=False):
-    """Averages all the scores for all of the swimmer's races"""
+    """Averages all the scores for all of the swimmer's races
+
+    Args:
+        name (str): The swimmer's name
+        team (str, optional): The swimmer's team
+        count_diving (bool, optional): If true, include diving scores in the rank
+            Default false
+        print_scores (bool, optional): If true, print scores to the console
+            Default false
+
+    Returns:
+        int: The percentile score for the team from 0-100
+    """
     all_swims = data.search_races(name=name, team=team)
 
     percentiles = []
@@ -47,7 +78,15 @@ def rank_swimmer(name, team=None, count_diving=False, print_scores=False):
 
 
 def rank_team(team_name, display_swimmers=False):
-    """Averages all of the swimmers scores on the team"""
+    """Averages all of the swimmers scores on the team
+
+    Args:
+        team_name (str): The name of the team
+        display_swimmers (bool, optional): If true, prints all of the swimmers to the console
+
+    Returns:
+        int: The percentile score for the team from 0-100
+    """
 
     # weights = [
     #     1,

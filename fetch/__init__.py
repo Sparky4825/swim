@@ -5,6 +5,20 @@ from datetime import datetime
 
 
 def fetch_meet_results(url, debug_print=False):
+    """Fetches and parses the meet results
+
+    Args:
+        url (str): The url to fetch the meet results from
+        debug_print (bool): If true, print information for debugging to console
+
+    Returns:
+        list: All of the swimmers and times from the meet in the format:
+            Format: [EVENT NAME,
+                        [[HOME TIME, SWIMMER NAME, exhib],
+                         [HOME TIME, SWIMMER NAME, exhib]],
+                        [[AWAY TIME, SWIMMER NAME, exhib],
+                         [AWAY TIME, SWIMMER NAME, exhib]]]
+    """
     page = requests.get(url)
 
     soup = BeautifulSoup(page.content, features="html.parser")
@@ -71,6 +85,17 @@ def fetch_meet_results(url, debug_print=False):
 
 
 def time_to_float(time):
+    """
+    Converts a time in human-readable time to a float
+
+    01:03.55 -> (float) 63.55
+
+    Args:
+        time (str): The time to be converted
+
+    Returns:
+        float: The time in seconds
+    """
     try:
         return float(time)
     except ValueError:
@@ -80,7 +105,15 @@ def time_to_float(time):
 
 
 def fetch_swimmer(url):
-    """Downloads the information and times for a swimmer at the given url"""
+    """
+    Downloads the information and times for a swimmer at the given url
+
+    Args:
+        url (str): The url for the swimmer
+
+    Returns:
+        fetch.swimmer.Swimmer object
+    """
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features="html.parser")
 
@@ -126,7 +159,11 @@ def fetch_swimmer(url):
 
 
 def fetch_team_urls():
-    """Fetch all the urls for all of the teams in section III"""
+    """Fetch all the urls for all of the teams in section III
+
+    Returns:
+        list: Each team listed as a sub-list [name, url]
+    """
 
     # Gets all of the teams
     url = 'http://www.swimdata.info/NYState/Sec3/BSwimMeet.nsf/WebTeams?OpenView'
