@@ -123,5 +123,6 @@ def download_all_relays():
 # ]
 # download_teams(teams)
 #
-download_all_relays()
+# download_all_relays()
+download_everything()
 data.close_connection()
