@@ -70,7 +70,7 @@ class Event:
 
         # Print out display
         if display:
-            MAX_NAME_LENGTH = 40
+            max_name_length = 40
             lines = []
 
             print(self.name)
@@ -85,11 +85,11 @@ class Event:
                 p = time.points
 
                 lines.append(
-                    '{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n, ' ' * (MAX_NAME_LENGTH - len(n)), p))
+                    '{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n, ' ' * (max_name_length - len(n)), p))
 
-            lines.append(' ' * (MAX_NAME_LENGTH + 19))
-            lines.append(' ' * (MAX_NAME_LENGTH + 19))
-            lines.append(' ' * (MAX_NAME_LENGTH + 19))
+            lines.append(' ' * (max_name_length + 19))
+            lines.append(' ' * (max_name_length + 19))
+            lines.append(' ' * (max_name_length + 19))
             count = -1
             for time in self.away_times:
                 count += 1
@@ -102,8 +102,10 @@ class Event:
 
                 # lines[count] += ('{}{}     {}{} {}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
                 # lines[count] += ('{0}{1}     {2}{3} {4}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
+                if count >= len(lines):
+                    lines.append(' ' * (max_name_length + 19))
                 lines[count] += (
-                    '{4} {3}{2}     {1}{0}'.format(' ' * (8 - len(t)), t, n, ' ' * (MAX_NAME_LENGTH - len(n)), p))
+                    '{4} {3}{2}     {1}{0}'.format(' ' * (8 - len(t)), t, n, ' ' * (max_name_length - len(n)), p))
 
             for i in lines:
                 print(i)
