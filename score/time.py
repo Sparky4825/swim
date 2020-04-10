@@ -9,7 +9,7 @@ class Time:
 
     def __str__(self):
         if self.time is None:
-            return 'DQ'
+            return "DQ"
         time = round(self.time, 2)
         if time >= 60:
             return str(datetime.timedelta(seconds=time))[2:-4]

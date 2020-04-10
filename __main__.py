@@ -58,14 +58,20 @@ def results_to_meet(results_array):
 
         # Add time objects with times from the list for home and away teams
         for t in e[1]:
-            if t[1] != '':
+            if t[1] != "":
                 home_times.append(score.Time(t[1], fetch.time_to_float(t[0])))
         for t in e[2]:
-            if t[1] != '':
+            if t[1] != "":
                 away_times.append(score.Time(t[1], fetch.time_to_float(t[0])))
 
         # Add the events
-        event = score.Event(e[0], home_times, away_times, 'relay' in e[0].lower(), 'diving' in e[0].lower())
+        event = score.Event(
+            e[0],
+            home_times,
+            away_times,
+            "relay" in e[0].lower(),
+            "diving" in e[0].lower(),
+        )
         meet.events.append(event)
 
     return meet
@@ -77,32 +83,36 @@ def meet_from_db(team1, date1, team2, date2):
     final_meet = score.Meet()
 
     all_events = [
-        '200 Medley Relay',
-        '200 Freestyle',
-        '200 Individual Medley',
-        '50 Freestyle',
-        'Diving',
-        '100 Butterfly',
-        '100 Freestyle',
-        '500 Freestyle',
-        '200 Freestyle Relay',
-        '100 Backstroke',
-        '100 Breaststroke',
-        '400 Freestyle Relay'
+        "200 Medley Relay",
+        "200 Freestyle",
+        "200 Individual Medley",
+        "50 Freestyle",
+        "Diving",
+        "100 Butterfly",
+        "100 Freestyle",
+        "500 Freestyle",
+        "200 Freestyle Relay",
+        "100 Backstroke",
+        "100 Breaststroke",
+        "400 Freestyle Relay",
     ]
 
     for current_event in all_events:
         # Search for matching times
-        team1_times_rows = data.search_races(event=current_event, date=date1, team=team1, relay_split=False)
-        team2_times_rows = data.search_races(event=current_event, date=date2, team=team2, relay_split=False)
+        team1_times_rows = data.search_races(
+            event=current_event, date=date1, team=team1, relay_split=False
+        )
+        team2_times_rows = data.search_races(
+            event=current_event, date=date2, team=team2, relay_split=False
+        )
 
         home_times = []
         home_swimmers = []
         away_times = []
         away_swimmers = []
 
-        is_relay = 'relay' in current_event.lower()
-        is_diving = 'diving' in current_event.lower()
+        is_relay = "relay" in current_event.lower()
+        is_diving = "diving" in current_event.lower()
 
         # Add all matching times to the meet
         for time in team1_times_rows:
@@ -118,7 +128,9 @@ def meet_from_db(team1, date1, team2, date2):
                 away_times.append(score.Time(time[1], time[5]))
                 away_swimmers.append(time[1])
 
-        final_meet.events.append(score.Event(current_event, home_times, away_times, is_relay, is_diving))
+        final_meet.events.append(
+            score.Event(current_event, home_times, away_times, is_relay, is_diving)
+        )
 
     return final_meet
 
@@ -141,7 +153,7 @@ def meet_from_db(team1, date1, team2, date2):
 # data.clear_database()
 # download.download_times_from_league_meets()
 # download.download_all_relays()
-date = '2019-12-19'
-meet_from_db('Cooperstown', date, 'Sherburne Earlville', date).score(True, entries=2)
+date = "2019-12-19"
+meet_from_db("Cooperstown", date, "Sherburne Earlville", date).score(True, entries=2)
 
 data.close_connection()

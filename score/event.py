@@ -7,7 +7,7 @@ class Event:
         self.diving = diving
 
         if self.relay and self.diving:
-            print("WARNING: EVENT: \"{}\" MARKED AS DIVING AND RELAY!".format(self.name))
+            print('WARNING: EVENT: "{}" MARKED AS DIVING AND RELAY!'.format(self.name))
             assert not (relay and diving)
 
     def score(self, display=False, entries=2):
@@ -19,10 +19,10 @@ class Event:
         # Add all times to the list
         all_times_with_dq = []
         for time in self.home_times:
-            all_times_with_dq.append(['home', time])
+            all_times_with_dq.append(["home", time])
 
         for time in self.away_times:
-            all_times_with_dq.append(['away', time])
+            all_times_with_dq.append(["away", time])
 
         all_times = []
         # Remove DQs
@@ -63,7 +63,7 @@ class Event:
                 break
 
             all_times[count][1].points = points
-            if all_times[count][0] == 'home':
+            if all_times[count][0] == "home":
                 points_home += points
             else:
                 points_away += points
@@ -74,42 +74,46 @@ class Event:
             lines = []
 
             print(self.name)
-            print('-' * 10)
+            print("-" * 10)
             for time in self.home_times:
 
                 if not self.diving:
                     t = str(time)
                 else:
-                    t = '{:.2f}'.format(time.time)
+                    t = "{:.2f}".format(time.time)
                 n = str(time.name)
                 p = time.points
 
                 lines.append(
-                    '{}{}     {}{} {}    '.format(' ' * (8 - len(t)), t, n, ' ' * (max_name_length - len(n)), p))
+                    "{}{}     {}{} {}    ".format(
+                        " " * (8 - len(t)), t, n, " " * (max_name_length - len(n)), p
+                    )
+                )
 
-            lines.append(' ' * (max_name_length + 19))
-            lines.append(' ' * (max_name_length + 19))
-            lines.append(' ' * (max_name_length + 19))
+            lines.append(" " * (max_name_length + 19))
+            lines.append(" " * (max_name_length + 19))
+            lines.append(" " * (max_name_length + 19))
             count = -1
             for time in self.away_times:
                 count += 1
                 if not self.diving:
                     t = str(time)
                 else:
-                    t = '{:.2f}'.format(time.time)
+                    t = "{:.2f}".format(time.time)
                 n = str(time.name)
                 p = time.points
 
                 # lines[count] += ('{}{}     {}{} {}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
                 # lines[count] += ('{0}{1}     {2}{3} {4}'.format(' ' * (8 - len(t)), t, n,' ' * (20 - len(n)), p))
                 if count >= len(lines):
-                    lines.append(' ' * (max_name_length + 19))
-                lines[count] += (
-                    '{4} {3}{2}     {1}{0}'.format(' ' * (8 - len(t)), t, n, ' ' * (max_name_length - len(n)), p))
+                    lines.append(" " * (max_name_length + 19))
+                lines[count] += "{4} {3}{2}     {1}{0}".format(
+                    " " * (8 - len(t)), t, n, " " * (max_name_length - len(n)), p
+                )
 
             for i in lines:
                 print(i)
 
-        print(' ' * 54, [points_home, points_away])
+        print(" " * 54, [points_home, points_away])
 
         return [points_home, points_away]

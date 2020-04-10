@@ -65,7 +65,7 @@ def rank_swimmer(name, team=None, count_diving=False, print_scores=False):
 
     percentiles = []
     for race in all_swims:
-        if 'diving' in race[3].lower() and not count_diving:
+        if "diving" in race[3].lower() and not count_diving:
             continue
         percentiles.append(rank_swim(race[5], race[3]))
         if print_scores:
